@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ScssMonitorAndCompile": {
+      "commandName": "Project",
+      "commandLineArgs": "--i C:\\Users\\pdnag\\source\\repos\\private\\DotNetLibraryAdmin\\src\\wwwroot\\assets\\css\\app.scss"
+    }
+  }
+}
