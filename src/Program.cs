@@ -118,9 +118,26 @@ namespace ScssMonitorAndCompile
         /// </summary>
         private static bool SetupFileSystemWatcher()
         {
-            var path = Path.GetDirectoryName(InputFile);
+            string path;
 
-            if (path == null || !Directory.Exists(path))
+            try
+            {
+                path = Path.GetDirectoryName(InputFile);
+
+                if (path == null)
+                {
+                    throw new Exception($"Unable to get path from {InputFile}");
+                }
+
+                path = Path.GetFullPath(path);
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex);
+                return false;
+            }
+
+            if (!Directory.Exists(path))
             {
                 ShowError($"Input file path not found: {path}");
                 return false;
@@ -128,15 +145,12 @@ namespace ScssMonitorAndCompile
 
             Watcher = new FileSystemWatcher
             {
-                Path = path,
-                IncludeSubdirectories = true,
-                Filter = "*.*"
+                Filter = "*.scss",
+                IncludeSubdirectories = false,
+                Path = path
             };
 
             Watcher.Changed += WatcherOnChanged;
-            Watcher.Created += WatcherOnChanged;
-            Watcher.Deleted += WatcherOnChanged;
-
             Watcher.EnableRaisingEvents = true;
 
             return true;
@@ -172,7 +186,7 @@ namespace ScssMonitorAndCompile
             Console.WriteLine("SCSS Monitor and Compile");
             Console.WriteLine("This app will monitor the input file and compile it for each change detected.");
             Console.WriteLine();
-            Console.WriteLine("Usage: smc --i <input-scss-file> [--o <output-css-file>]");
+            Console.WriteLine("Usage: smc -i <input-scss-file> [-o <output-css-file>]");
             Console.WriteLine();
             Console.WriteLine("  -i  .scss file to monitor.");
             Console.WriteLine("  -o  .css file to output too. If not set this will be the same as input file with a .css ext.");
@@ -184,7 +198,7 @@ namespace ScssMonitorAndCompile
         /// </summary>
         private static void WatcherOnChanged(object sender, FileSystemEventArgs e)
         {
-            if (e.FullPath == OutputFile)
+            if (e.FullPath != InputFile)
             {
                 return;
             }
