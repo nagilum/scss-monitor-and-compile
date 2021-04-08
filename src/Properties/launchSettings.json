@@ -2,7 +2,7 @@
   "profiles": {
     "ScssMonitorAndCompile": {
       "commandName": "Project",
-      "commandLineArgs": "--i C:\\Users\\pdnag\\source\\repos\\private\\DotNetLibraryAdmin\\src\\wwwroot\\assets\\css\\app.scss"
+      "commandLineArgs": "-i ..\\..\\..\\..\\..\\DetectorV2\\DetectorApi\\src\\wwwroot\\assets\\css\\app.scss"
     }
   }
 }
